@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Welcome from "./welcome";
+import logo from './logo-cdv.png';
 
 let elem;
 const userIsLoggedIn = location.pathname != "/welcome";
@@ -8,7 +9,7 @@ const userIsLoggedIn = location.pathname != "/welcome";
 if (!userIsLoggedIn) {
     elem = <Welcome />;
 } else {
-    elem = <h1>I will be the logo component</h1>;
+    elem = <img src={logo} alt={"logo"}/>;
 }
 
 ReactDOM.render(elem, document.querySelector('main'));

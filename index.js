@@ -36,7 +36,6 @@ app.post("/register", (req, res) => {
     const { first, last, email, password } = req.body;
     hash(password)
         .then((hashedPw) => {
-            console.log("hashedPw in / register:", hashedPw);
             if (
                 first !== "" &&
                 last !== "" &&
@@ -45,20 +44,9 @@ app.post("/register", (req, res) => {
             ) {
                 db.addRegistration(first, last, email, hashedPw)
                     .then((results) => {
-                        console.log("results:", results);
-                        req.session.userId = { 
-                            id: results.rows[0].id,
-                            first: first,
-                            last: last,
-                            email: email,
-                        };
-                        res.json({ success:true });
-                        console.log(
-                            "req.session.userId: ",
-                            req.session.userId
-                        );
-                        
-                        // res.redirect("/petition");
+                        req.session.userId = results.rows[0].id;
+                        res.json({ success:true });                       
+                        // res.redirect("/petition")
                     })
                     .catch((err) => {
                         console.log("error with addRegistration", err);
