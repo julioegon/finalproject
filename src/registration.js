@@ -21,7 +21,7 @@ export default class Registration extends React.Component {
             .post("/register", this.state)
             .then((response) => {
                 console.log("response", response);
-                if (response.data.succes) {
+                if (response.data.success) {
                     // then we want to redirect the user to our social network
                     location.replace("/");
                 } else {
@@ -36,14 +36,14 @@ export default class Registration extends React.Component {
     render() {
         return (
             <div>
-                <form>
-                    <h2>I am the Registration Component!</h2>
-                    <input name ="first" placeholder="first name..." onChange={(e) => this.handleChange(e)}></input>
-                    <input name ="last" placeholder="last name..." onChange={(e) => this.handleChange(e)}></input>
-                    <input name ="email" placeholder="email..." onChange={(e) => this.handleChange(e)}></input>
-                    <input name ="password" placeholder="password" type="password" onChange={(e) => this.handleChange(e)}></input>
-                    <button onClick={() => this.submit()}>Register</button>
-                </form>
+                
+                <h2>I am the Registration Component!</h2>
+                <input name ="first" placeholder="first name..." onChange={(e) => this.handleChange(e)}></input>
+                <input name ="last" placeholder="last name..." onChange={(e) => this.handleChange(e)}></input>
+                <input name ="email" placeholder="email..." type="email" onChange={(e) => this.handleChange(e)}></input>
+                <input name ="password" placeholder="password" type="password" onChange={(e) => this.handleChange(e)}></input>
+                <button onClick={() => this.submit()}>Register</button>
+            
             </div>
         );
     }
