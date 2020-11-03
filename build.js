@@ -4,7 +4,7 @@ const conf = {
     entry: ["@babel/polyfill", __dirname + '/src/start.js'],
     output: {
         path: __dirname,
-        filename: 'bundle.js'
+        filename: 'bundle.js' 
     },
     performance: {
         hints: false
@@ -16,8 +16,8 @@ const conf = {
     module: {
         rules: [
             {
-                test: /\.js$/,
-                loader: 'babel-loader',
+                test: /\.js$/, //set rule that only compiled .js files
+                loader: 'babel-loader', //transpiler 
                 query: {
                     presets: ['@babel/preset-react', '@babel/preset-env']
                 }
