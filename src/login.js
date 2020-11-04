@@ -3,7 +3,8 @@
 import React from 'react';
 import axios from './axios';
 import { Link } from 'react-router-dom';
-export default class Registration extends React.Component {
+
+export default class Login extends React.Component {
     constructor() {
         super();
         this.state = {};
@@ -20,7 +21,7 @@ export default class Registration extends React.Component {
     submit() {
         console.log("about to submit!!");
         axios
-            .post("/register", this.state)
+            .post("/login", this.state)
             .then((response) => {
                 console.log("response", response);
                 if (response.data.success) {

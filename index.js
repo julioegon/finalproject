@@ -70,7 +70,7 @@ app.post("/register", (req, res) => {
                 last !== "" &&
                 email !== "" &&
                 password !== ""
-            ) {
+            ) { console.log('first: ', first);
                 db.addRegistration(first, last, email, hashedPw)
                     .then((results) => {
                         //console.log('results.rows[0].id: ', results.rows[0].id);
