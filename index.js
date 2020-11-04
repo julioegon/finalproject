@@ -5,6 +5,7 @@ const compression = require('compression');
 const cookieSession = require("cookie-session");
 const db = require("./db");
 const { hash, compare } = require("./bc");
+const csurf = require("csurf");
 
 app.use(
     cookieSession({
@@ -14,6 +15,13 @@ app.use(
 );
 
 app.use(compression());
+
+app.use(csurf());
+
+app.use(function(req, res, next){
+    res.cookie('mytoken', req.csrfToken());
+    next();
+});
 
 app.use(express.json());
 
@@ -32,6 +40,27 @@ if (process.env.NODE_ENV != 'production') {
 
 //// ROUTES /////
 
+app.post("/login", (req, res) => {
+    const { email, password } = req.body;
+    db.getUserByEmail(email)
+        .then((results) => {
+            compare(password, results.rows[0].password).then((match) => {
+                if (match) {
+                    req.session.userId = results.rows[0].id;
+                    res.json({ success:true });
+                } else {
+                    res.json({ success:false });
+                }
+            });
+        })
+        .catch((err) => {
+            console.log("Email or password didn't match:", err);
+        })
+        .catch((err) => {
+            console.log("Email or password didn't match:", err);
+        });
+});
+
 app.post("/register", (req, res) => {
     const { first, last, email, password } = req.body;
     hash(password)
@@ -44,9 +73,9 @@ app.post("/register", (req, res) => {
             ) {
                 db.addRegistration(first, last, email, hashedPw)
                     .then((results) => {
+                        //console.log('results.rows[0].id: ', results.rows[0].id);
                         req.session.userId = results.rows[0].id;
                         res.json({ success:true });                       
-                        // res.redirect("/petition")
                     })
                     .catch((err) => {
                         console.log("error with addRegistration", err);
@@ -78,9 +107,9 @@ app.get("/welcome", (req, res) => {
 
 
 app.get('*', function(req, res) {
-    console.log('req.session: ', req.session);
-    // console.log('req.session.userId: ', req.session.userId);
-    // console.log('!res.session.userId: ', !res.session.userId);
+    //console.log('req.session: ', req.session);
+    console.log('req.session.userId: ', req.session.userId);
+    //console.log('!res.session.userId: ', !res.session.userId);
     if (!req.session.userId) {
         res.redirect('/welcome');
     } else {

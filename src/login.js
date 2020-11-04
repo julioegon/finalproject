@@ -1,3 +1,5 @@
+// src/login.js
+
 import React from 'react';
 import axios from './axios';
 import { Link } from 'react-router-dom';
@@ -37,15 +39,21 @@ export default class Registration extends React.Component {
         return (
             <div>
                 
-                <h2>I am the Registration Component!</h2>
+                <h2>I am the Login Component</h2>
                 
-                <input name ="first" placeholder="first name..." onChange={(e) => this.handleChange(e)}></input>
-                <input name ="last" placeholder="last name..." onChange={(e) => this.handleChange(e)}></input>
                 <input name ="email" placeholder="email..." type="email" onChange={(e) => this.handleChange(e)}></input>
                 <input name ="password" placeholder="password" type="password" onChange={(e) => this.handleChange(e)}></input>
-                <button onClick={() => this.submit()}>Register</button>
+                <button onClick={() => this.submit()}>Log in</button>
                 
             </div>
         );
     }
 }
+// export default function Greetee(props) {
+//     console.log("props: ", props); // props is ALWAYS an object!
+//     return (
+//         <div>
+//             <p>{props.first}</p>
+//         </div>
+//     );
+// }

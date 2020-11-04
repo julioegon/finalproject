@@ -15,3 +15,7 @@ exports.addRegistration = (first, last, email, password) => {
         [first, last, email, password]
     );
 };
+
+exports.getUserByEmail = (email) => {
+    return db.query(`SELECT * FROM users WHERE email = $1`, [email]);
+};
