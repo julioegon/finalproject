@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 //import Greetee from "./greetee";
 import Registration from "./registration";
 import Login from './login';
-
+import Logo from "./logo";
 
 
 
@@ -14,7 +14,7 @@ export default function Welcome() {
     return (
         <div id="welcome">
             <h1>Welcome!</h1>
-            <img src="/logo.png" />
+            <Logo />
             <HashRouter>
                 <div>
                     <Route exact path="/" component={Registration} />

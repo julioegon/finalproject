@@ -6,6 +6,7 @@ const cookieSession = require("cookie-session");
 const db = require("./db");
 const { hash, compare } = require("./bc");
 const csurf = require("csurf");
+const cryptoRandomString = require('crypto-random-string');
 
 app.use(
     cookieSession({
