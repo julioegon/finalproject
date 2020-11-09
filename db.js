@@ -1,4 +1,3 @@
-  
 const spicedPg = require("spiced-pg");
 const db = spicedPg(
     process.env.DATABASE_URL ||
@@ -47,4 +46,20 @@ exports.updatePassword = (hash, email) => {
         hash,
         email,
     ]);
+};
+
+exports.postImages = (profileimg, id) => {
+    return db.query(
+        `UPDATE users SET profileimg = $1 WHERE id = $2 RETURNING profileimg;
+    `,
+        [profileimg, id]
+    );
+};
+
+exports.addBio = (bio, id) => {
+    return db.query(
+        `UPDATE users SET bio = $1 WHERE id = $2 RETURNING bio;
+    `,
+        [bio, id]
+    );
 };
