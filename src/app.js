@@ -4,6 +4,8 @@ import Logo from "./logo";
 import Profile from "./profile";
 import ProfilePic from "./profilepic";
 import Uploader from "./uploader";
+import { Browser, BrowserRouter, Route } from "react-router-dom";
+import OtherProfile from "./OtherProfile";
 
 export default class App extends React.Component {
     constructor() {
@@ -54,35 +56,64 @@ export default class App extends React.Component {
     render() {
         return (
             <div>
-                <Logo />
-                <header>
-                    <Profile
-                        first={this.state.first}
-                        last={this.state.last}
-                        profileimg={this.state.profileimg}
-                        bio={this.state.bio}
-                        addBio={(arg) => this.addBio(arg)}
-                    />
-                    <h1> Hey I am your App :D</h1>
-                </header>
-                <div className="main-container">
-                    <ProfilePic
-                        first={this.state.first}
-                        last={this.state.last}
-                        profileimg={this.state.profileimg}
-                    />
-                    {this.state.uploaderIsVisible && (
-                        <Uploader methodInApp={this.methodInApp} />
-                    )}
-                    <h2 onClick={() => this.toggleUploader()}>
-                        {" "}
-                        Changing state with a method: toggleUploader
-                        {this.state.uploaderIsVisible &&
-                            "Upload your profile picture"}
-                        {!this.state.uploaderIsVisible &&
-                            "Thanks for joining our community"}{" "}
-                    </h2>
-                </div>
+                <BrowserRouter>
+                    <Logo />
+                    {/* <Route path="/logo-display" component={Logo} /> */}
+                    <header>
+                        {/* <Profile
+                            first={this.state.first}
+                            last={this.state.last}
+                            profileimg={this.state.profileimg}
+                            bio={this.state.bio}
+                            addBio={(arg) => this.addBio(arg)}
+                            toggleUploader={this.toggleUploader}
+                        /> */}
+                        <h1> Hey I am your App :D</h1>
+                    </header>
+                    <div className="main-container">
+                        <Route
+                            exact
+                            path="/"
+                            render={() => (
+                                <Profile
+                                    first={this.state.first}
+                                    last={this.state.last}
+                                    profileimg={this.state.profileimg}
+                                    bio={this.state.bio}
+                                    addBio={(arg) => this.addBio(arg)}
+                                    toggleUploader={this.toggleUploader}
+                                />
+                            )}
+                        />
+
+                        <Route
+                            path="/user/:id"
+                            render={(props) => (
+                                <OtherProfile
+                                    key={props.url}
+                                    match={props.match}
+                                    history={props.history}
+                                />
+                            )}
+                        />
+                        <ProfilePic
+                            first={this.state.first}
+                            last={this.state.last}
+                            profileimg={this.state.profileimg}
+                        />
+                        {this.state.uploaderIsVisible && (
+                            <Uploader methodInApp={this.methodInApp} />
+                        )}
+                        <h2 onClick={() => this.toggleUploader()}>
+                            {" "}
+                            Changing state with a method: toggleUploader
+                            {this.state.uploaderIsVisible &&
+                                "Upload your profile picture"}
+                            {!this.state.uploaderIsVisible &&
+                                "Thanks for joining our community"}{" "}
+                        </h2>
+                    </div>
+                </BrowserRouter>
             </div>
         );
     }

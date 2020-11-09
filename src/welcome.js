@@ -1,14 +1,13 @@
 // src/hello-world.js
 import React from "react";
 import axios from "./axios";
-import { HashRouter, Route } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import { HashRouter, Route, Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 //import Greetee from "./greetee";
 import Registration from "./registration";
-import Login from './login';
+import Login from "./login";
 import Logo from "./logo";
 import PasswordReset from "./passwordreset";
-
 
 export default function Welcome() {
     return (
