@@ -23,14 +23,15 @@ export default class App extends React.Component {
     componentDidMount() {
         console.log("App just mounted");
         axios
-            .get("/users", this.state)
+            .get("/user", this.state)
             .then(({ data }) => {
+                console.log("data: ", data);
                 this.setState({ ...data }, () => {
                     console.log("this.state: ", this.state);
                 });
             })
-            .catch((error) => {
-                console.log("error in axios: ", error);
+            .catch((err) => {
+                console.log("error in axios: ", err);
             });
     }
     toggleUploader() {

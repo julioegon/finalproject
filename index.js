@@ -186,6 +186,18 @@ app.get("/welcome", (req, res) => {
     }
 });
 
+app.get("/user", (req, res) => {
+    const { userId } = req.session;
+    console.log("userId: ", userId);
+    db.getUserById(userId)
+        .then(({ rows }) => {
+            res.json(rows[0]);
+        })
+        .catch((err) => {
+            console.log("error in GET /user: ", err);
+        });
+});
+
 app.post(
     "/upload/profilepic",
     uploader.single("file"),

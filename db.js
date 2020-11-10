@@ -63,3 +63,7 @@ exports.addBio = (bio, id) => {
         [bio, id]
     );
 };
+
+exports.getUserById = (id) => {
+    return db.query(`SELECT * FROM users WHERE id = $1`, [id]);
+};
