@@ -50,7 +50,7 @@ export default class App extends React.Component {
     }
 
     addBio(arg) {
-        console.log(arg);
+        console.log("addBio in App", arg);
         this.setState({ bio: arg });
     }
 

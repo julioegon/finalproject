@@ -11,7 +11,7 @@ export default function ProfilePic({
         <div>
             {/* <h2>Hi, my name is {first}{" "}{last}</h2>  */}
             <img
-                className="small"
+                className="profile-image"
                 src={profileimg || "/img/logo.png"}
                 onClick={() => toggleUploader("uploaderIsVisible")}
                 alt={first + " " + last}

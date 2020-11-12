@@ -1,3 +1,30 @@
+* {
+    box-sizing: border-box;
+}
+
 body {
     background-color: whitesmoke;
 }
+
+img {
+    display: block;
+}
+
+.profile-image {
+    float: left;
+    width: calc(33.333% - 1rem);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 3rem;
+}
+
+.profile-image img {
+    border-radius: 50%;
+}
+
+/* Responsive Styling */
+
+/* @media screen and (max-width: 40rem) .profile-image img {
+    width: 7.7rem;
+} */

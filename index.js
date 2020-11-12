@@ -204,7 +204,7 @@ app.post(
     s3.upload,
     (req, res) => {
         if (req.file) {
-            console.log("req.session.userId: ", req.session.userId);
+            //console.log("req.session.userId: ", req.session.userId);
             const id = req.session.userId;
             const { filename } = req.file;
             const url = s3Url + filename;
@@ -231,14 +231,15 @@ app.post(
 );
 
 app.post("/bioeditor", (req, res) => {
-    const { id, bio } = req.body;
-    console.log(req.body);
+    const bio = req.body;
+    console.log("req.body: ", req.body);
+    const id = req.session.userId;
 
     db.addBio(bio, id)
         .then(({ rows }) => {
-            rows = rows[0];
-            console.log("image url after upload:", rows);
-            res.json(rows);
+            console.log("rows: ", rows[0].bio);
+            console.log("userId after upload:", rows);
+            res.json(rows[0]);
         })
         .catch((err) => {
             console.log("error in posting image: ", err);
@@ -250,7 +251,7 @@ app.post("/bioeditor", (req, res) => {
 
 app.get("*", function (req, res) {
     //console.log('req.session: ', req.session);
-    console.log("req.session.userId: ", req.session.userId);
+    //console.log("req.session.userId: ", req.session.userId);
     //console.log('!res.session.userId: ', !res.session.userId);
     if (!req.session.userId) {
         res.redirect("/welcome");
