@@ -10,22 +10,6 @@ export default class BioEditor extends Component {
 
         this.textAreaToggle = this.textAreaToggle.bind(this);
     }
-    //     textAreaToggle() {
-    //         console.log("Bla Bla Bla");
-    //         this.setState({
-    //             editorIsVisible: !this.state.editorIsVisible,
-    //         });
-    //     }
-
-    //     render() {
-    //         return (
-    //             <>
-    //                 <h1>Bio Editor</h1>!{this.state.editorIsVisible && <textarea />}
-    //                 <button onClick={this.textAreaToggle}>Add Bio</button>
-    //             </>
-    //         );
-    //     }
-    // }
 
     textAreaToggle(e) {
         this.setState({
@@ -54,7 +38,7 @@ export default class BioEditor extends Component {
     submitBio() {
         console.log("about to submit!!!", this.state);
         axios
-            .post("/bioeditor", { bio: this.state.bioDraft, id: this.props.id }) // { bio: this.state.bioDraft, id: this.props.id }
+            .post("/bioeditor", { bio: this.state.bioDraft, id: this.props.id })
             .then((response) => {
                 console.log(response.data);
                 this.setState({
@@ -71,6 +55,7 @@ export default class BioEditor extends Component {
     render() {
         return (
             <>
+                <h1>Bio Editor</h1>
                 {this.state.editorIsVisible && (
                     <div>
                         <textarea
