@@ -11,7 +11,7 @@ export default class App extends React.Component {
     constructor() {
         super();
         this.state = {
-            user_id: "",
+            id: "",
             first: "",
             last: "",
             profileimg: "",
@@ -83,6 +83,7 @@ export default class App extends React.Component {
                                     bio={this.state.bio}
                                     addBio={(arg) => this.addBio(arg)}
                                     toggleUploader={this.toggleUploader}
+                                    id={this.state.id}
                                 />
                             )}
                         />

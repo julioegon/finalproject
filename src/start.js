@@ -2,8 +2,17 @@ import React from "react";
 import ReactDOM from "react-dom";
 import Welcome from "./welcome";
 import App from "./app";
-import { useStatefulFields } from "./hooks/useStatefulFields";
-import { useAuthSubmit } from "./hooks/useAuthSubmit";
+// import { useStatefulFields } from "./hooks/useStatefulFields";
+// import { useAuthSubmit } from "./hooks/useAuthSubmit";
+import { createStore, applyMiddleware } from "redux";
+import reduxPromise from "redux-promise";
+import { composeWithDevTools } from "redux-devtools-extension";
+import reducer from "./reducer";
+import { Provider } from "react-redux";
+const store = createStore(
+    reducer,
+    composeWithDevTools(applyMiddleware(reduxPromise))
+);
 
 let elem;
 const userIsLoggedIn = location.pathname != "/welcome";
@@ -11,7 +20,11 @@ const userIsLoggedIn = location.pathname != "/welcome";
 if (!userIsLoggedIn) {
     elem = <Welcome />; //<Welcome />;
 } else {
-    elem = <App />; //<img src="logo.png" alt="logo" />;
+    elem = (
+        <Provider store={store}>
+            <App />
+        </Provider>
+    );
 }
 
 // function Login() {

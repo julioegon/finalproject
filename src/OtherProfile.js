@@ -1,34 +1,56 @@
 import React from "react";
 import axios from "./axios";
+// import FriendButton from "./FriendButton";
 
 export default class OtherProfile extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {};
     }
     componentDidMount() {
-        console.log("this.props.match", this.props.match);
-        // we'll want to use this.props.match.params.id to tell our server for which user
-        // we want to get information for, our server should also check and see if we are
-        // trying to access our own profile, or simply send back the id of our logged
-        // in user alongside the information for the one we are currently viewing,
-        // if we are viewing ourself, we should be send back to the slash route
-        if (this.props.match.params.id == 7) {
-            this.props.history.push("/");
-        }
+        axios
+            .get(`/api/user/${this.props.match.params.id}`)
+            .then(({ data }) => {
+                if (
+                    !data.success ||
+                    this.props.match.params.id == data.userId
+                ) {
+                    this.props.history.push("/");
+                } else {
+                    this.setState({
+                        first: data.rows.first,
+                        last: data.rows.last,
+                        profileimg: data.rows.profileimg,
+                        bio: data.rows.bio,
+                    });
+                }
+            })
+            .catch((err) => {
+                console.log("err in axios OtherProfile component", err);
+            });
     }
 
     render() {
         return (
-            <>
-                <h1> Hi am the OtherProfile</h1>
-                <h2>
-                    {" "}
-                    I will eventually display other people's profiles meaning
-                    their picture & bio, but I won't give other people acces to
-                    edit this bio
-                </h2>
-            </>
+            <div id="other-profile">
+                {!this.state.error && (
+                    <img
+                        className="profile-image"
+                        src={this.state.profileimg || "/logo.png"}
+                    />
+                )}
+                <h1 id="other-name">
+                    {this.state.first} {this.state.last}
+                </h1>
+                <div id="other-bio">
+                    {this.state.bio && (
+                        <div id="bio-text">{this.state.bio}</div>
+                    )}
+                    <div id="bio-buttons-div">
+                        {/* <FriendButton otherId={this.props.match.params.id} /> */}
+                    </div>
+                </div>
+            </div>
         );
     }
 }

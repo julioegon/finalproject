@@ -198,6 +198,31 @@ app.get("/user", (req, res) => {
         });
 });
 
+app.get("/api/user/:id", (req, res) => {
+    console.log("ACCESSED GET /api/user route ");
+    const { id } = req.params;
+    if (id) {
+        db.getUserById(id)
+            .then(({ rows }) => {
+                // console.log("rows in GET /user", rows);
+                res.json({
+                    success: true,
+                    rows: rows[0],
+                });
+            })
+            .catch((err) => {
+                "err in GET /user with getUserInfo()", err;
+                res.json({
+                    success: false,
+                    errorMsg: "Server error: Could not find user details",
+                });
+            });
+    } else {
+        //user is not logged in
+        res.redirect("/");
+    }
+});
+
 app.post(
     "/upload/profilepic",
     uploader.single("file"),
