@@ -274,6 +274,47 @@ app.post("/bioeditor", (req, res) => {
         });
 });
 
+app.get("/api/users", (req, res) => {
+    console.log("ACCESSED GET /api/users route");
+
+    db.findUsers()
+        .then(({ rows }) => {
+            console.log("res from findUsers()", rows);
+            res.json({
+                success: true,
+                rows,
+            });
+        })
+        .catch((err) => {
+            console.log("err in /api/:users with findUsers()", err);
+        });
+});
+
+app.get(`/api/users/:search`, (req, res) => {
+    console.log("ACCESSED GET /api/:search route");
+    console.log("req.params in api/search", req.params);
+    const { search } = req.params;
+
+    db.getMatchUsers(search)
+        .then(({ rows }) => {
+            if (rows.length != 0) {
+                console.log("res from getMatchUsers()", rows);
+                res.json({
+                    success: true,
+                    rows,
+                });
+            } else {
+                res.json({
+                    success: false,
+                    error: "No users found",
+                });
+            }
+        })
+        .catch((err) => {
+            console.log("err in /api/:users with getMatchUsers()", err);
+        });
+});
+
 app.get("*", function (req, res) {
     //console.log('req.session: ', req.session);
     //console.log("req.session.userId: ", req.session.userId);

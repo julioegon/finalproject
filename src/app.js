@@ -6,6 +6,7 @@ import ProfilePic from "./profilepic";
 import Uploader from "./uploader";
 import { Browser, BrowserRouter, Route } from "react-router-dom";
 import OtherProfile from "./OtherProfile";
+import FindPeople from "./FindPeople";
 
 export default class App extends React.Component {
     constructor() {
@@ -114,6 +115,7 @@ export default class App extends React.Component {
                             {!this.state.uploaderIsVisible &&
                                 "Thanks for joining our community"}{" "}
                         </h2>
+                        <Route path="/" render={() => <FindPeople />} />
                     </div>
                 </BrowserRouter>
             </div>
