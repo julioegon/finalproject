@@ -9,8 +9,7 @@ import reducer from "./reducer";
 import { Provider } from "react-redux";
 import { useStatefulFields } from "./hooks/useStatefulFields";
 import { useAuthSubmit } from "./hooks/useAuthSubmit";
-import axios from "./axios";
-
+import { init } from "./socket";
 const store = createStore(
     reducer,
     composeWithDevTools(applyMiddleware(reduxPromise))
@@ -19,7 +18,10 @@ const store = createStore(
 let elem;
 const userIsLoggedIn = location.pathname != "/welcome";
 
-if (!userIsLoggedIn) {
+// check if it is !userIsLoggedIn
+
+if (userIsLoggedIn) {
+    init(store);
     elem = <Welcome />; //<Welcome />;
 } else {
     elem = (
@@ -48,7 +50,7 @@ function Login() {
             <input onChange={handleChange} name="email" placeholder="email" />
             <input
                 onChange={handleChange}
-                name="pw"
+                name="password"
                 placeholder="password"
                 type="password"
             />
@@ -80,7 +82,7 @@ function Register() {
             <input onChange={handleChange} name="email" placeholder="email" />
             <input
                 onChange={handleChange}
-                name="pw"
+                name="password"
                 placeholder="password"
                 type="password"
             />

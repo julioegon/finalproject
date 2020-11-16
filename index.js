@@ -13,6 +13,8 @@ const s3Url = "https://s3.amazonaws.com/image-board-pimento/";
 const multer = require("multer");
 const uidSafe = require("uid-safe");
 const path = require("path");
+const server = require("http").Server(app);
+const io = require("socket.io")(server, { origins: "localhost:8080" });
 
 const diskStorage = multer.diskStorage({
     destination: function (req, file, callback) {
@@ -40,17 +42,19 @@ app.use(
 );
 
 app.use(compression());
+app.use(express.json());
 
+app.use(express.static("public"));
 app.use(csurf());
 
 app.use(function (req, res, next) {
     res.cookie("mytoken", req.csrfToken());
     next();
 });
-
-app.use(express.json());
-
-app.use(express.static("public"));
+// app.use(function (req, res, next) {
+//     res.cookie("mytoken", req.csrfToken());
+//     next();
+// });
 
 if (process.env.NODE_ENV != "production") {
     app.use(
@@ -64,6 +68,105 @@ if (process.env.NODE_ENV != "production") {
 }
 
 //// ROUTES /////
+// app.post("/login", (req, res) => {
+//     const { email, password } = req.body;
+//     db.getUserByEmail(email)
+//         .then((results) => {
+//             const hashedPw = req.session;
+//             compare(password, hashedPw).then((match) => {
+//                 if (match) {
+//                     req.session.userId = results.rows[0].id;
+//                     res.json({ success: true });
+//                 } else {
+//                     res.json({ success: false });
+//                 }
+//             });
+//         })
+//         .catch((err) => {
+//             console.log("Email or password didn't match:", err);
+//         })
+//         .catch((err) => {
+//             console.log("Email or password didn't match:", err);
+//         });
+// });
+
+app.post("/login", (req, res) => {
+    console.log("ACCESSED  POST /login route");
+    // console.log("req.session at POST /login", req.session);
+
+    const { email, password } = req.body;
+    console.log("req.session at POST /login", req.session);
+
+    if (email !== "" && password !== "") {
+        db.getUserByEmail(email)
+            .then(({ rows }) => {
+                let hashedPw = rows[0].password;
+                compare(password, hashedPw)
+                    .then((match) => {
+                        if (match) {
+                            req.session.userId = rows[0].id;
+                            res.json({ success: true });
+                        } else {
+                            console.log("Incorrect email and/or password");
+                            res.json({
+                                success: false,
+                                error:
+                                    "Incorrect credentials, please try again",
+                            });
+                        }
+                    })
+                    .catch((err) => {
+                        console.log("err in POST /login compare", err);
+                        res.json({
+                            success: false,
+                            error: "Incorrect credentials, please try again",
+                        });
+                    });
+            })
+            .catch((err) => {
+                console.log("err in POST /login with getPwByEmail()", err);
+                res.json({
+                    success: false,
+                    error: "Incorrect credentials, please try again",
+                });
+            });
+    } else {
+        console.log("all input fields must be populated");
+        res.json({
+            success: false,
+            error: "Incorrect credentials, please try again",
+        });
+    }
+});
+
+app.post("/register", (req, res) => {
+    const { first, last, email, password } = req.body;
+    hash(password)
+        .then((hashedPw) => {
+            if (
+                first !== "" &&
+                last !== "" &&
+                email !== "" &&
+                password !== ""
+            ) {
+                console.log("first: ", first);
+                db.addRegistration(first, last, email, hashedPw)
+                    .then((results) => {
+                        //console.log('results.rows[0].id: ', results.rows[0].id);
+                        req.session.userId = results.rows[0].id;
+                        res.json({ success: true });
+                    })
+                    .catch((err) => {
+                        console.log("error with addRegistration", err);
+                    });
+            } else {
+                res.json({ success: false });
+            }
+        })
+        .catch((err) => {
+            console.log("error in POST register hash", err);
+        });
+});
 
 app.post("/password/reset/start", (req, res) => {
     const { email } = req.body;
@@ -126,56 +229,6 @@ app.post("/password/reset/verify", (req, res) => {
             });
         }
     });
-});
-
-app.post("/login", (req, res) => {
-    const { email, password } = req.body;
-    db.getUserByEmail(email)
-        .then((results) => {
-            compare(password, results.rows[0].password).then((match) => {
-                if (match) {
-                    req.session.userId = results.rows[0].id;
-                    res.json({ success: true });
-                } else {
-                    res.json({ success: false });
-                }
-            });
-        })
-        .catch((err) => {
-            console.log("Email or password didn't match:", err);
-        })
-        .catch((err) => {
-            console.log("Email or password didn't match:", err);
-        });
-});
-
-app.post("/register", (req, res) => {
-    const { first, last, email, password } = req.body;
-    hash(password)
-        .then((hashedPw) => {
-            if (
-                first !== "" &&
-                last !== "" &&
-                email !== "" &&
-                password !== ""
-            ) {
-                console.log("first: ", first);
-                db.addRegistration(first, last, email, hashedPw)
-                    .then((results) => {
-                        //console.log('results.rows[0].id: ', results.rows[0].id);
-                        req.session.userId = results.rows[0].id;
-                        res.json({ success: true });
-                    })
-                    .catch((err) => {
-                        console.log("error with addRegistration", err);
-                    });
-            } else {
-                res.json({ success: false });
-            }
-        })
-        .catch((err) => {
-            console.log("error in POST register hash", err);
-        });
 });
 
 app.get("/welcome", (req, res) => {
@@ -316,9 +369,6 @@ app.get(`/api/users/:search`, (req, res) => {
 });
 
 app.get("*", function (req, res) {
-    //console.log('req.session: ', req.session);
-    //console.log("req.session.userId: ", req.session.userId);
-    //console.log('!res.session.userId: ', !res.session.userId);
     if (!req.session.userId) {
         res.redirect("/welcome");
     } else {
@@ -326,6 +376,32 @@ app.get("*", function (req, res) {
     }
 });
 
-app.listen(8080, function () {
+server.listen(8080, function () {
     console.log("I'm listening.");
+});
+
+//// SOCKET SERVER ////
+
+io.on("connection", (socket) => {
+    console.log(`socket with the id ${socket.id} is now connected`);
+
+    // sending messaged to client from server
+    socket.emit("welcome", {
+        name: "Julio",
+    });
+
+    // io.emit: sends a message to Every Connected Client
+    io.emit("messageSentWithIoEmit", {
+        id: socket.id,
+    });
+
+    // socket.broadcast.emit
+    socket.broadcast.emit("broadcastEmitFun", {
+        socketId: socket.id,
+    });
+
+    // listening message from client
+    socket.on("messageFromClient", (data) => {
+        //console.log("data from socket: ", data);
+    });
 });
