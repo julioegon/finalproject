@@ -42,19 +42,17 @@ app.use(
 );
 
 app.use(compression());
-app.use(express.json());
 
-app.use(express.static("public"));
 app.use(csurf());
 
 app.use(function (req, res, next) {
     res.cookie("mytoken", req.csrfToken());
     next();
 });
-// app.use(function (req, res, next) {
-//     res.cookie("mytoken", req.csrfToken());
-//     next();
-// });
+
+app.use(express.json());
+
+app.use(express.static("public"));
 
 if (process.env.NODE_ENV != "production") {
     app.use(
@@ -68,75 +66,25 @@ if (process.env.NODE_ENV != "production") {
 }
 
 //// ROUTES /////
-// app.post("/login", (req, res) => {
-//     const { email, password } = req.body;
-//     db.getUserByEmail(email)
-//         .then((results) => {
-//             const hashedPw = req.session;
-//             compare(password, hashedPw).then((match) => {
-//                 if (match) {
-//                     req.session.userId = results.rows[0].id;
-//                     res.json({ success: true });
-//                 } else {
-//                     res.json({ success: false });
-//                 }
-//             });
-//         })
-//         .catch((err) => {
-//             console.log("Email or password didn't match:", err);
-//         })
-//         .catch((err) => {
-//             console.log("Email or password didn't match:", err);
-//         });
-// });
-
 app.post("/login", (req, res) => {
-    console.log("ACCESSED  POST /login route");
-    // console.log("req.session at POST /login", req.session);
-
     const { email, password } = req.body;
-    console.log("req.session at POST /login", req.session);
-
-    if (email !== "" && password !== "") {
-        db.getUserByEmail(email)
-            .then(({ rows }) => {
-                let hashedPw = rows[0].password;
-                compare(password, hashedPw)
-                    .then((match) => {
-                        if (match) {
-                            req.session.userId = rows[0].id;
-                            res.json({ success: true });
-                        } else {
-                            console.log("Incorrect email and/or password");
-                            res.json({
-                                success: false,
-                                error:
-                                    "Incorrect credentials, please try again",
-                            });
-                        }
-                    })
-                    .catch((err) => {
-                        console.log("err in POST /login compare", err);
-                        res.json({
-                            success: false,
-                            error: "Incorrect credentials, please try again",
-                        });
-                    });
-            })
-            .catch((err) => {
-                console.log("err in POST /login with getPwByEmail()", err);
-                res.json({
-                    success: false,
-                    error: "Incorrect credentials, please try again",
-                });
+    db.getUserByEmail(email)
+        .then((results) => {
+            compare(password, results.rows[0].password).then((match) => {
+                if (match) {
+                    req.session.userId = results.rows[0].id;
+                    res.json({ success: true });
+                } else {
+                    res.json({ success: false });
+                }
             });
-    } else {
-        console.log("all input fields must be populated");
-        res.json({
-            success: false,
-            error: "Incorrect credentials, please try again",
+        })
+        .catch((err) => {
+            console.log("Email or password didn't match:", err);
+        })
+        .catch((err) => {
+            console.log("Email or password didn't match:", err);
         });
-    }
 });
 
 app.post("/register", (req, res) => {
@@ -332,7 +280,7 @@ app.get("/api/users", (req, res) => {
 
     db.findUsers()
         .then(({ rows }) => {
-            console.log("res from findUsers()", rows);
+            //console.log("res from findUsers()", rows);
             res.json({
                 success: true,
                 rows,
@@ -366,6 +314,11 @@ app.get(`/api/users/:search`, (req, res) => {
         .catch((err) => {
             console.log("err in /api/:users with getMatchUsers()", err);
         });
+});
+
+app.get("/api/logout", (req, res) => {
+    req.session = null;
+    res.redirect("*");
 });
 
 app.get("*", function (req, res) {

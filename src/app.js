@@ -7,6 +7,7 @@ import Uploader from "./uploader";
 import { Browser, BrowserRouter, Route } from "react-router-dom";
 import OtherProfile from "./OtherProfile";
 import FindPeople from "./FindPeople";
+import LogOut from "./logout";
 
 export default class App extends React.Component {
     constructor() {
@@ -53,6 +54,13 @@ export default class App extends React.Component {
     addBio(arg) {
         console.log("addBio in App", arg);
         this.setState({ bio: arg });
+    }
+
+    logOut() {
+        // console.log("logout clicked");
+        axios.get("/api/logout").then(() => {
+            location.replace("/welcome#/login");
+        });
     }
 
     render() {
@@ -117,6 +125,7 @@ export default class App extends React.Component {
                         </h2>
                         <Route path="/" render={() => <FindPeople />} />
                     </div>
+                    <LogOut logoutButton={() => this.logOut()} />
                 </BrowserRouter>
             </div>
         );
