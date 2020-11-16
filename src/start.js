@@ -2,13 +2,15 @@ import React from "react";
 import ReactDOM from "react-dom";
 import Welcome from "./welcome";
 import App from "./app";
-// import { useStatefulFields } from "./hooks/useStatefulFields";
-// import { useAuthSubmit } from "./hooks/useAuthSubmit";
 import { createStore, applyMiddleware } from "redux";
 import reduxPromise from "redux-promise";
 import { composeWithDevTools } from "redux-devtools-extension";
 import reducer from "./reducer";
 import { Provider } from "react-redux";
+import { useStatefulFields } from "./hooks/useStatefulFields";
+import { useAuthSubmit } from "./hooks/useAuthSubmit";
+import axios from "./axios";
+
 const store = createStore(
     reducer,
     composeWithDevTools(applyMiddleware(reduxPromise))
@@ -27,55 +29,65 @@ if (!userIsLoggedIn) {
     );
 }
 
-// function Login() {
-//     const [values, handleChange] = useStatefulFields();
-//     const [error, handleSubmit] = useAuthSubmit("/login", values);
+ReactDOM.render(
+    <>
+        <Login />
+        <Register />
+    </>,
+    document.querySelector("main")
+);
 
-//     return (
-//         <div>
-//             <h2>Login</h2>
-//             {error && <div>Oops! Something went wrong.</div>}
-//             <input onChange={handleChange} name="email" placeholder="email" />
-//             <input
-//                 onChange={handleChange}
-//                 name="pw"
-//                 placeholder="password"
-//                 type="password"
-//             />
-//             <button onClick={handleSubmit}>submit</button>
-//         </div>
-//     );
-// }
+function Login() {
+    const [values, handleChange] = useStatefulFields();
+    const [error, handleSubmit] = useAuthSubmit("/login", values);
 
-// function Register() {
-//     const [values, handleChange] = useStatefulFields();
-//     const [error, handleSubmit] = useAuthSubmit("/register", values);
+    return (
+        <div>
+            <h2>Login</h2>
+            {error && <div>Oops! Something went wrong.</div>}
+            <input onChange={handleChange} name="email" placeholder="email" />
+            <input
+                onChange={handleChange}
+                name="pw"
+                placeholder="password"
+                type="password"
+            />
+            <input type="hidden" name="_csrf" value="{{csrfToken}}"></input>
+            <button onClick={handleSubmit}>submit</button>
+        </div>
+    );
+}
 
-//     return (
-//         <div>
-//             <h2>Register</h2>
+function Register() {
+    const [values, handleChange] = useStatefulFields();
+    const [error, handleSubmit] = useAuthSubmit("/register", values);
 
-//             {error && <div>Oops! Something went wrong.</div>}
-//             <input
-//                 onChange={handleChange}
-//                 name="first"
-//                 placeholder="first name"
-//             />
-//             <input
-//                 onChange={handleChange}
-//                 name="last"
-//                 placeholder="last name"
-//             />
-//             <input onChange={handleChange} name="email" placeholder="email" />
-//             <input
-//                 onChange={handleChange}
-//                 name="pw"
-//                 placeholder="password"
-//                 type="password"
-//             />
-//             <button onClick={handleSubmit}>submit</button>
-//         </div>
-//     );
-// }
+    return (
+        <div>
+            <h2>Register</h2>
 
-ReactDOM.render(elem, document.querySelector("main"));
+            {error && <div>Oops! Something went wrong.</div>}
+            <input
+                onChange={handleChange}
+                name="first"
+                placeholder="first name"
+            />
+            <input
+                onChange={handleChange}
+                name="last"
+                placeholder="last name"
+            />
+            <input onChange={handleChange} name="email" placeholder="email" />
+            <input
+                onChange={handleChange}
+                name="pw"
+                placeholder="password"
+                type="password"
+            />
+            <input type="hidden" name="_csrf" value="{{csrfToken}}"></input>
+            <button onClick={handleSubmit}>submit</button>
+        </div>
+    );
+}
+
+// ReactDOM.render(elem, document.querySelector("main"));
