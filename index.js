@@ -262,8 +262,8 @@ app.post(
 );
 
 app.post("/bioeditor", (req, res) => {
-    const bio = req.body;
-    console.log("req.body: ", req.body);
+    const bio = req.body.bio;
+    console.log("req.body.bio: ", req.body.bio);
     const id = req.session.userId;
 
     db.addBio(bio, id)

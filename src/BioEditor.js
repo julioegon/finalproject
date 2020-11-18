@@ -6,6 +6,7 @@ export default class BioEditor extends Component {
         super(props);
         this.state = {
             editorIsVisible: false,
+            bioDraft: "",
         };
 
         this.textAreaToggle = this.textAreaToggle.bind(this);
@@ -32,6 +33,7 @@ export default class BioEditor extends Component {
 
     addBioInApp(arg) {
         console.log("console.log in addBio", arg);
+        arg = this.state.bioDraft;
         this.props.addBio(arg);
     }
 
@@ -40,11 +42,11 @@ export default class BioEditor extends Component {
         axios
             .post("/bioeditor", { bio: this.state.bioDraft, id: this.props.id })
             .then((response) => {
-                console.log(response.data);
+                console.log(this.state.bioDraft);
                 this.setState({
-                    bioDraft: response.data.bio,
+                    bioDraft: this.state.bioDraft,
                 });
-                this.addBioInApp(response.data.bio);
+                this.addBioInApp(this.state.bioDraft);
                 this.textAreaToggle();
             })
             .catch((e) => {
