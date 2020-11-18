@@ -431,26 +431,52 @@ server.listen(8080, function () {
 
 io.on("connection", (socket) => {
     console.log(`socket with the id ${socket.id} is now connected`);
+
+    socket.on("disconnect", function () {
+        console.log(`socket with the id ${socket.id} is now disconnected`);
+    });
+
     if (!socket.request.session.userId) {
         return socket.disconnect(true);
     }
     const userId = socket.request.session.userId;
 
-    io.sockets.emit("chatHistory", "");
+    db.getLast10Msgs().then(({ rows }) => {
+        io.sockets.emit("chatHistory", rows.reverse());
+    });
+
+    //io.sockets.emit("chatHistory", "");
 
     // receiving a new message from a connected socket
     socket.on("My amazing new msg", (newMsg) => {
         console.log("received amazing new msg from client:", newMsg);
         // we want to find out who send this msg :D
         console.log("author of the msg was user with id:", userId);
-        // we need to add this msg to the chat table
-        // we also want to retrieve the information of the author of the msg specifically first, maybe last (?), and url from our users table
-        // compose an msg object containing the user info and the new message that
-        // got send make sure it structurally matches with what your message
-        // objects in the chat history look like
-        io.sockets.emit("newMsgToAddToHistory", newMsg);
+        db.addNewMessage(newMsg, userId).then(({ rows }) => {
+            const timestamp = rows[0].timestamp;
+            const chat_id = rows[0].id;
+
+            db.getUserById(userId).then(({ rows }) => {
+                const payload = {
+                    user_id: rows[0].id,
+                    first: rows[0].first,
+                    last: rows[0].last,
+                    profileimg: rows[0].profileimg,
+                    message: newMsg,
+                    sender_id: rows[0].id,
+                    timestamp: timestamp,
+                    chat_id: chat_id,
+                };
+                io.sockets.emit("newMsgToAddToHistory", payload);
+            });
+        });
     });
 });
+// we need to add this msg to the chat table
+// we also want to retrieve the information of the author of the msg specifically first, maybe last (?), and url from our users table
+// compose an msg object containing the user info and the new message that
+// got send make sure it structurally matches with what your message
+// objects in the chat history look like
 
 // // sending messaged to client from server
 //     socket.emit("welcome", {

@@ -28,3 +28,15 @@ CREATE TABLE reset_codes(
    recipient_id INT REFERENCES users(id) ON DELETE CASCADE,
    accepted BOOLEAN DEFAULT false
  );
+
+DROP TABLE IF EXISTS chat CASCADE;
+
+CREATE TABLE chat(
+    id SERIAL PRIMARY KEY,
+    message VARCHAR NOT NULL,
+    sender_id INT REFERENCES users(id) ON DELETE CASCADE,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+INSERT INTO chat (message, sender_id) VALUES('How was the bootcamp?',1);
+INSERT INTO chat (message, sender_id) VALUES('Sanity Check!',2);

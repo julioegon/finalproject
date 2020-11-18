@@ -60,5 +60,20 @@ export default function (state = {}, action) {
 
     // console.log("OUTSIDE IF state ACCEPT", state);
 
+    if (action.type == "GET_LAST10MSGS") {
+        state = Object.assign({}, state, {
+            chatMessages: action.chatMessages,
+        });
+    }
+    //updates state with chat history
+    if (action.type == "ADD_NEWMESSAGE") {
+        state = {
+            ...state,
+            chatMessages: [...state.chatMessages, action.message],
+        };
+    }
+
+    // console.log("global state", state);
+
     return state;
 }

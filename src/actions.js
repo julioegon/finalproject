@@ -50,3 +50,17 @@ export async function unfriend(otherId) {
         console.log("err in removeFriend() action axios", err);
     }
 }
+
+export async function getLast10Msgs(chatMsgs) {
+    return {
+        type: "GET_LAST10MSGS",
+        chatMessages: chatMsgs,
+    };
+}
+
+export async function addNewMessage(msg) {
+    return {
+        type: "ADD_NEWMESSAGE",
+        message: msg,
+    };
+}

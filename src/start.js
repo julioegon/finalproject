@@ -31,6 +31,8 @@ if (!userIsLoggedIn) {
     );
 }
 
+ReactDOM.render(elem, document.querySelector("main"));
+
 // ReactDOM.render(
 //     <>
 //         <Login />
@@ -92,5 +94,3 @@ if (!userIsLoggedIn) {
 //         </div>
 //     );
 // }
-
-ReactDOM.render(elem, document.querySelector("main"));
