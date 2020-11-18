@@ -4,10 +4,13 @@ import Logo from "./logo";
 import Profile from "./profile";
 import ProfilePic from "./profilepic";
 import Uploader from "./uploader";
-import { Browser, BrowserRouter, Route } from "react-router-dom";
+import { BrowserRouter, Route } from "react-router-dom";
+import { Link } from "react-router-dom";
 import OtherProfile from "./OtherProfile";
 import FindPeople from "./FindPeople";
 import LogOut from "./logout";
+import Chat from "./Chat";
+import Friends from "./friends";
 
 export default class App extends React.Component {
     constructor() {
@@ -68,6 +71,16 @@ export default class App extends React.Component {
             <div>
                 <BrowserRouter>
                     <Logo />
+                    <Link
+                        to="/friends"
+                        style={{
+                            marginTop: "5px",
+                            color: "whitesmoke",
+                            fontSize: "1.5rem",
+                        }}
+                    >
+                        Friends
+                    </Link>
                     {/* <Route path="/logo-display" component={Logo} /> */}
                     <header>
                         {/* <Profile
@@ -125,6 +138,8 @@ export default class App extends React.Component {
                         </h2>
                         <Route path="/" render={() => <FindPeople />} />
                     </div>
+                    <Route path="/friends" component={Friends} />
+                    <Route path="/chat" component={Chat} />
                     <LogOut logoutButton={() => this.logOut()} />
                 </BrowserRouter>
             </div>

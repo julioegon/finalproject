@@ -70,7 +70,9 @@ export default function FindPeople() {
                                 </div>
                                 <p
                                     style={{
-                                        color: "blue",
+                                        marginTop: "5px",
+                                        color: "whitesmoke",
+                                        fontSize: "1.5rem",
                                     }}
                                 >
                                     {user.first} {user.last}

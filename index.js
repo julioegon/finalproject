@@ -34,12 +34,16 @@ const uploader = multer({
     },
 });
 
-app.use(
-    cookieSession({
-        secret: "Whatever Secret",
-        maxAge: 1000 * 60 * 60 * 24 * 14,
-    })
-);
+// COOKIE SESSION MIDDLEWARE //
+const cookieSessionMiddleware = cookieSession({
+    secret: `I'm always angry.`,
+    maxAge: 1000 * 60 * 60 * 24 * 90,
+});
+
+app.use(cookieSessionMiddleware);
+io.use(function (socket, next) {
+    cookieSessionMiddleware(socket.request, socket.request.res, next);
+});
 
 app.use(compression());
 
@@ -49,11 +53,12 @@ app.use(function (req, res, next) {
     res.cookie("mytoken", req.csrfToken());
     next();
 });
-
+// BOILER PLATE FOR REQ.BODY POST REQ NOT TO BE EMPTY //
 app.use(express.json());
 
 app.use(express.static("public"));
 
+// BUNDLE SERVER THAT COMPILED OUR CODE //
 if (process.env.NODE_ENV != "production") {
     app.use(
         "/bundle.js",
@@ -316,6 +321,95 @@ app.get(`/api/users/:search`, (req, res) => {
         });
 });
 
+////// FRIEND REQUEST ////
+
+app.get(`/api/friendStatus/:otherId`, async (req, res) => {
+    console.log("ACCESSED GET /api/friendStatus/:otherId route");
+    const { otherId } = req.params;
+    const { userId } = req.session;
+
+    try {
+        let { rows } = await db.checkFriendStatus(userId, otherId);
+        if (rows.length == 0) {
+            res.json({
+                status: "Send Friend Request",
+            });
+        } else if (!rows[0].accepted && rows[0].sender_id == userId) {
+            res.json({
+                status: "Cancel Friend Request",
+            });
+        } else if (!rows[0].accepted && rows[0].sender_id == otherId) {
+            res.json({
+                status: "Accept Friend Request",
+            });
+        } else if (rows[0].accepted) {
+            res.json({
+                status: "Remove Friend",
+            });
+        }
+    } catch (err) {
+        console.log(
+            "err in /api/friendStatus/:otherId with checkFriendStatus",
+            err
+        );
+    }
+});
+
+app.post(`/api/friendStatus/button`, async (req, res) => {
+    console.log("ACCESSED POST /api/friendStatus/button route");
+    let { buttonText, otherId } = req.body;
+    let { userId } = req.session;
+
+    if (buttonText == "Send Friend Request") {
+        try {
+            await db.sendFriendRequest(userId, otherId);
+            res.json({ status: "Cancel Friend Request" });
+        } catch (err) {
+            console.log("err in POST .../button with sendFriendRequest", err);
+        }
+    } else if (buttonText == "Cancel Friend Request") {
+        try {
+            await db.cancelFriendRequest(userId, otherId);
+            res.json({ status: "Send Friend Request" });
+        } catch (err) {
+            console.log("err in POST .../button with cancelFriendRequest", err);
+        }
+    } else if (buttonText == "Accept Friend Request") {
+        try {
+            await db.acceptFriendRequest(userId, otherId);
+            res.json({ status: "Remove Friend", id: otherId });
+        } catch (err) {
+            console.log("err in POST .../button with acceptFriendRequest", err);
+        }
+    } else if (buttonText == "Remove Friend") {
+        try {
+            await db.removeFriend(userId, otherId);
+            res.json({ status: "Send Friend Request", id: otherId });
+        } catch (err) {
+            console.log("err in POST .../button with removeFriend", err);
+        }
+    }
+});
+
+app.get("/getFriends", async (req, res) => {
+    const { userId } = req.session;
+    console.log("userId: ", userId);
+    try {
+        const { rows } = await db.getFriends(userId);
+        let received = rows.filter(function (user) {
+            return !user.accepted && user.sender_id != userId;
+        });
+        let sent = rows.filter(function (user) {
+            return !user.accepted && user.sender_id == userId;
+        });
+        res.json({ rows, received, sent });
+    } catch (e) {
+        console.log(e);
+    }
+});
+
+/// LOGOUT ///
+
 app.get("/api/logout", (req, res) => {
     req.session = null;
     res.redirect("*");
@@ -337,24 +431,43 @@ server.listen(8080, function () {
 
 io.on("connection", (socket) => {
     console.log(`socket with the id ${socket.id} is now connected`);
+    if (!socket.request.session.userId) {
+        return socket.disconnect(true);
+    }
+    const userId = socket.request.session.userId;
 
-    // sending messaged to client from server
-    socket.emit("welcome", {
-        name: "Julio",
-    });
+    io.sockets.emit("chatHistory", "");
 
-    // io.emit: sends a message to Every Connected Client
-    io.emit("messageSentWithIoEmit", {
-        id: socket.id,
-    });
-
-    // socket.broadcast.emit
-    socket.broadcast.emit("broadcastEmitFun", {
-        socketId: socket.id,
-    });
-
-    // listening message from client
-    socket.on("messageFromClient", (data) => {
-        //console.log("data from socket: ", data);
+    // receiving a new message from a connected socket
+    socket.on("My amazing new msg", (newMsg) => {
+        console.log("received amazing new msg from client:", newMsg);
+        // we want to find out who send this msg :D
+        console.log("author of the msg was user with id:", userId);
+        // we need to add this msg to the chat table
+        // we also want to retrieve the information of the author of the msg specifically first, maybe last (?), and url from our users table
+        // compose an msg object containing the user info and the new message that
+        // got send make sure it structurally matches with what your message
+        // objects in the chat history look like
+        io.sockets.emit("newMsgToAddToHistory", newMsg);
     });
 });
+
+// // sending messaged to client from server
+//     socket.emit("welcome", {
+//         name: "Julio",
+//     });
+
+//     // io.emit: sends a message to Every Connected Client
+//     io.emit("messageSentWithIoEmit", {
+//         id: socket.id,
+//     });
+
+//     // socket.broadcast.emit
+//     socket.broadcast.emit("broadcastEmitFun", {
+//         socketId: socket.id,
+//     });
+
+//     // listening message from client
+//     socket.on("messageFromClient", (data) => {
+//         //console.log("data from socket: ", data);
+//     });
