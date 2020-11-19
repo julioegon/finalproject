@@ -21,9 +21,9 @@ const userIsLoggedIn = location.pathname != "/welcome";
 // check if it is !userIsLoggedIn
 
 if (!userIsLoggedIn) {
-    init(store);
     elem = <Welcome />; //<Welcome />;
 } else {
+    init(store);
     elem = (
         <Provider store={store}>
             <App />

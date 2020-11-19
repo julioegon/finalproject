@@ -69,7 +69,7 @@ export default function (state = {}, action) {
     if (action.type == "ADD_NEWMESSAGE") {
         state = {
             ...state,
-            chatMessages: [...state.chatMessages, action.message],
+            chatMessages: [...state.chatMessages, ...action.addNewMessage],
         };
     }
 

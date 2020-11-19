@@ -155,7 +155,7 @@ module.exports.getFriends = (userId) => {
 module.exports.getLast10Msgs = () => {
     return db.query(
         `
-        SELECT users.id AS user_id, first, last, url, chat.id AS chat_id, message, sender_id, chat.timestamp
+        SELECT users.id AS user_id, first, last, profileimg, chat.id AS chat_id, message, sender_id, chat.timestamp
         FROM chat 
         JOIN users
         ON (sender_id=users.id)

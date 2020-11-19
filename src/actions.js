@@ -51,7 +51,7 @@ export async function unfriend(otherId) {
     }
 }
 
-export async function getLast10Msgs(chatMsgs) {
+export async function chatMessages(chatMsgs) {
     return {
         type: "GET_LAST10MSGS",
         chatMessages: chatMsgs,
@@ -61,6 +61,6 @@ export async function getLast10Msgs(chatMsgs) {
 export async function addNewMessage(msg) {
     return {
         type: "ADD_NEWMESSAGE",
-        message: msg,
+        addNewMessage: msg,
     };
 }

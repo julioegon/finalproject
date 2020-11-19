@@ -432,14 +432,15 @@ server.listen(8080, function () {
 io.on("connection", (socket) => {
     console.log(`socket with the id ${socket.id} is now connected`);
 
-    socket.on("disconnect", function () {
-        console.log(`socket with the id ${socket.id} is now disconnected`);
-    });
+    // socket.on("disconnect", function () {
+    //     console.log(`socket with the id ${socket.id} is now disconnected`);
+    // });
 
-    if (!socket.request.session.userId) {
+    const userId = socket.request.session.userId;
+
+    if (!userId) {
         return socket.disconnect(true);
     }
-    const userId = socket.request.session.userId;
 
     db.getLast10Msgs().then(({ rows }) => {
         io.sockets.emit("chatHistory", rows.reverse());
@@ -454,7 +455,7 @@ io.on("connection", (socket) => {
         console.log("author of the msg was user with id:", userId);
         db.addNewMessage(newMsg, userId).then(({ rows }) => {
             const timestamp = rows[0].timestamp;
-            const chat_id = rows[0].id;
+            // const chat_id = rows[0].id;
 
             db.getUserById(userId).then(({ rows }) => {
                 const payload = {
@@ -463,37 +464,10 @@ io.on("connection", (socket) => {
                     last: rows[0].last,
                     profileimg: rows[0].profileimg,
                     message: newMsg,
-                    sender_id: rows[0].id,
                     timestamp: timestamp,
-                    chat_id: chat_id,
                 };
-                io.sockets.emit("newMsgToAddToHistory", payload);
+                io.emit("My amazing new msg", payload);
             });
         });
     });
 });
-// we need to add this msg to the chat table
-// we also want to retrieve the information of the author of the msg specifically first, maybe last (?), and url from our users table
-// compose an msg object containing the user info and the new message that
-// got send make sure it structurally matches with what your message
-// objects in the chat history look like
-
-// // sending messaged to client from server
-//     socket.emit("welcome", {
-//         name: "Julio",
-//     });
-
-//     // io.emit: sends a message to Every Connected Client
-//     io.emit("messageSentWithIoEmit", {
-//         id: socket.id,
-//     });
-
-//     // socket.broadcast.emit
-//     socket.broadcast.emit("broadcastEmitFun", {
-//         socketId: socket.id,
-//     });
-
-//     // listening message from client
-//     socket.on("messageFromClient", (data) => {
-//         //console.log("data from socket: ", data);
-//     });
