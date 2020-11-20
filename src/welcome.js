@@ -9,7 +9,15 @@ import PasswordReset from "./passwordreset";
 export default function Welcome() {
     return (
         <div id="welcome">
-            <h1>Welcome!</h1>
+            <h1
+                style={{
+                    marginTop: "50px",
+                    color: "#ffd200",
+                    fontSize: "1.5rem",
+                }}
+            >
+                Welcome to Casa de Vera Community!
+            </h1>
             <Logo />
             <HashRouter>
                 <div>

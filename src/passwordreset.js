@@ -15,9 +15,7 @@ export default class PasswordReset extends React.Component {
         if (this.state.resetPassword == 0) {
             return (
                 <>
-                    <h2>
-                        Please enter the email address used for registration:
-                    </h2>
+                    <h2>Please enter your email address:</h2>
                     <input
                         name="email"
                         placeholder="email..."
@@ -27,8 +25,20 @@ export default class PasswordReset extends React.Component {
                     ></input>
                     <button
                         style={{
-                            backgroundColor: "teal",
+                            font: "whitesmoke",
+                            background: "none",
+                            border: "none",
+                            color: "inherit",
+                            padding: "0",
+                            cursor: "pointer",
+                            // marginTop: "5px",
+                            fontSize: "1.0rem",
                             color: "white",
+                            width: "100px",
+                            height: "20px",
+                            margin: "0",
+                            backgroundImage:
+                                "linear-gradient(to top, #736b5e, #aba499)",
                         }}
                         className="input-registration"
                         onClick={() => this.submit("/password/reset/start")}
@@ -40,7 +50,10 @@ export default class PasswordReset extends React.Component {
         } else if (this.state.resetPassword == 1) {
             return (
                 <>
-                    <h2>Please enter the code you received:</h2>
+                    <h2>
+                        Please enter the code you received in your inbox if not
+                        check your spam:
+                    </h2>
                     <input
                         name="code"
                         placeholder="code..."
@@ -61,12 +74,24 @@ export default class PasswordReset extends React.Component {
                     ></input>
 
                     <button
-                        style={{
-                            backgroundColor: "teal",
-                            color: "white",
-                        }}
                         className="input-registration"
                         onClick={() => this.submit("/password/reset/verify")}
+                        style={{
+                            font: "whitesmoke",
+                            background: "none",
+                            border: "none",
+                            color: "inherit",
+                            padding: "0",
+                            cursor: "pointer",
+                            // marginTop: "5px",
+                            fontSize: "1.0rem",
+                            color: "white",
+                            width: "100px",
+                            height: "20px",
+                            margin: "0",
+                            backgroundImage:
+                                "linear-gradient(to top, #736b5e, #aba499)",
+                        }}
                     >
                         Submit
                     </button>
@@ -77,8 +102,18 @@ export default class PasswordReset extends React.Component {
                 <>
                     <h2>Success!</h2>
                     <p>
-                        You can now <Link to="/login">sign in</Link> with your
-                        new password.
+                        You can now{" "}
+                        <Link
+                            to="/login"
+                            style={{
+                                marginTop: "50px",
+                                color: "whitesmoke",
+                                fontSize: "1.5rem",
+                            }}
+                        >
+                            sign in
+                        </Link>{" "}
+                        with your new password.
                     </p>
                 </>
             );
@@ -128,10 +163,19 @@ export default class PasswordReset extends React.Component {
                 )}
                 {this.getCurrentDisplay()}
                 <p>
-                    Not registered yet? <Link to="/">Register</Link>
+                    Not registered yet?{" "}
+                    <Link
+                        to="/"
+                        style={{
+                            marginTop: "50px",
+                            color: "whitesmoke",
+                            fontSize: "1.5rem",
+                        }}
+                    >
+                        Register
+                    </Link>
                 </p>
             </div>
         );
     }
 }
-

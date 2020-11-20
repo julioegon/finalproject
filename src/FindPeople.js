@@ -42,7 +42,12 @@ export default function FindPeople() {
 
     return (
         <>
-            <div id="search-users">
+            <div
+                id="search-users"
+                style={{
+                    marginTop: "50px",
+                }}
+            >
                 <input
                     className="reg-input"
                     autoComplete="off"

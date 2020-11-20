@@ -57,7 +57,7 @@ export default class BioEditor extends Component {
     render() {
         return (
             <>
-                <h1>Bio Editor</h1>
+                <h1></h1>
                 {this.state.editorIsVisible && (
                     <div>
                         <textarea
@@ -74,10 +74,20 @@ export default class BioEditor extends Component {
                         onClick={() => this.textAreaToggle()}
                         className="input-registration"
                         style={{
-                            backgroundColor: "black",
+                            font: "whitesmoke",
+                            background: "none",
+                            border: "none",
+                            color: "inherit",
+                            padding: "0",
+                            cursor: "pointer",
+                            // marginTop: "5px",
+                            fontSize: "1.0rem",
                             color: "white",
-                            width: "130px",
-                            margin: "10px auto",
+                            width: "100px",
+                            height: "20px",
+                            margin: "0",
+                            backgroundImage:
+                                "linear-gradient(to top, #736b5e, #aba499)",
                         }}
                     >
                         Edit bio!
@@ -88,10 +98,20 @@ export default class BioEditor extends Component {
                         onClick={this.textAreaToggle}
                         className="input-registration"
                         style={{
-                            backgroundColor: "black",
+                            font: "whitesmoke",
+                            background: "none",
+                            border: "none",
+                            color: "inherit",
+                            padding: "0",
+                            cursor: "pointer",
+                            // marginTop: "5px",
+                            fontSize: "1.0rem",
                             color: "white",
-                            width: "130px",
-                            margin: "10px auto",
+                            width: "100px",
+                            height: "20px",
+                            margin: "0",
+                            backgroundImage:
+                                "linear-gradient(to top, #736b5e, #aba499)",
                         }}
                     >
                         Add bio!
@@ -102,10 +122,20 @@ export default class BioEditor extends Component {
                         onClick={() => this.submitBio()}
                         className="input-registration"
                         style={{
-                            backgroundColor: "black",
+                            font: "whitesmoke",
+                            background: "none",
+                            border: "none",
+                            color: "inherit",
+                            padding: "0",
+                            cursor: "pointer",
+                            // marginTop: "5px",
+                            fontSize: "1.0rem",
                             color: "white",
-                            width: "130px",
-                            margin: "10px auto",
+                            width: "100px",
+                            height: "20px",
+                            margin: "0",
+                            backgroundImage:
+                                "linear-gradient(to top, #736b5e, #aba499)",
                         }}
                     >
                         Submit bio!

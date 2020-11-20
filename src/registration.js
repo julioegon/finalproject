@@ -1,19 +1,17 @@
-import React from 'react';
-import axios from './axios';
-import { Link } from 'react-router-dom';
-
+import React from "react";
+import axios from "./axios";
+import { Link } from "react-router-dom";
 
 export default class Registration extends React.Component {
     constructor() {
         super();
         this.state = {};
-        
     }
 
     handleChange(e) {
         //console.log("e.target.value", e.target.value);
         this.setState({
-            [e.target.name] : e.target.value,
+            [e.target.name]: e.target.value,
         });
     }
 
@@ -38,15 +36,64 @@ export default class Registration extends React.Component {
     render() {
         return (
             <div>
-                
-                <h2>I am the Registration Component!</h2>
-                
-                <input name ="first" placeholder="first name..." onChange={(e) => this.handleChange(e)}></input>
-                <input name ="last" placeholder="last name..." onChange={(e) => this.handleChange(e)}></input>
-                <input name ="email" placeholder="email..." type="email" onChange={(e) => this.handleChange(e)}></input>
-                <input name ="password" placeholder="password" type="password" onChange={(e) => this.handleChange(e)}></input>
-                <button onClick={() => this.submit()}>Register</button>
-                <p>Already a member? <Link to="/login">Log in</Link></p>
+                <h2>All input fields must be fill to join our community</h2>
+
+                <input
+                    name="first"
+                    placeholder="first name..."
+                    onChange={(e) => this.handleChange(e)}
+                ></input>
+                <input
+                    name="last"
+                    placeholder="last name..."
+                    onChange={(e) => this.handleChange(e)}
+                ></input>
+                <input
+                    name="email"
+                    placeholder="email..."
+                    type="email"
+                    onChange={(e) => this.handleChange(e)}
+                ></input>
+                <input
+                    name="password"
+                    placeholder="password"
+                    type="password"
+                    onChange={(e) => this.handleChange(e)}
+                ></input>
+                <button
+                    onClick={() => this.submit()}
+                    style={{
+                        font: "whitesmoke",
+                        background: "none",
+                        border: "none",
+                        color: "inherit",
+                        padding: "0",
+                        cursor: "pointer",
+                        // marginTop: "5px",
+                        fontSize: "1.0rem",
+                        color: "white",
+                        width: "100px",
+                        height: "20px",
+                        margin: "0",
+                        backgroundImage:
+                            "linear-gradient(to top, #736b5e, #aba499)",
+                    }}
+                >
+                    Register
+                </button>
+                <p>
+                    Already a member?{" "}
+                    <Link
+                        to="/login"
+                        style={{
+                            marginTop: "50px",
+                            color: "whitesmoke",
+                            fontSize: "1.5rem",
+                        }}
+                    >
+                        Log in
+                    </Link>
+                </p>
             </div>
         );
     }

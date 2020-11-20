@@ -56,7 +56,7 @@ export default class Uploader extends React.Component {
     render() {
         return (
             <div className="section">
-                <h1>Uploader</h1>
+                <h3>Upload your profile picture</h3>
                 <img
                     src={this.state.url || "/img/logo.png"}
                     alt={this.props.first + " " + this.props.last}
@@ -71,8 +71,8 @@ export default class Uploader extends React.Component {
                 ></input>
                 <button
                     style={{
-                        backgroundColor: "teal",
-                        color: "white",
+                        backgroundColor: "dimgrey",
+                        color: "whitesmoke",
                     }}
                     className="input-registration"
                     onClick={() => this.submit()}

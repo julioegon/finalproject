@@ -68,22 +68,58 @@ export default class App extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className="main-container">
                 <BrowserRouter>
-                    <Logo />
-                    <Link
-                        to="/friends"
-                        style={{
-                            marginTop: "5px",
-                            color: "whitesmoke",
-                            fontSize: "1.5rem",
-                        }}
-                    >
-                        Friends
-                    </Link>
-                    {/* <Route path="/logo-display" component={Logo} /> */}
-                    <header>
-                        {/* <Profile
+                    <div className="header-container">
+                        <header>
+                            <Logo />
+                            <Link to="/">
+                                <h1
+                                    style={{
+                                        marginTop: "50px",
+                                        color: "#ffd200",
+                                        fontSize: "1.5rem",
+                                    }}
+                                >
+                                    {" "}
+                                    Casa de Vera Community
+                                </h1>
+                            </Link>
+                            <Link
+                                to="/friends"
+                                style={{
+                                    marginTop: "50px",
+                                    color: "whitesmoke",
+                                    fontSize: "1.5rem",
+                                }}
+                            >
+                                Friends
+                            </Link>
+                            <br></br>
+                            <Link
+                                to="/chat"
+                                style={{
+                                    marginTop: "50px",
+                                    color: "whitesmoke",
+                                    fontSize: "1.5rem",
+                                }}
+                            >
+                                Chat
+                            </Link>
+                            <br></br>
+                            <Link
+                                to="/FindPeople"
+                                style={{
+                                    marginTop: "50px",
+                                    color: "whitesmoke",
+                                    fontSize: "1.5rem",
+                                }}
+                            >
+                                Find People
+                            </Link>
+                            <LogOut logoutButton={() => this.logOut()} />
+                            {/* <Route path="/logo-display" component={Logo} /> */}
+                            {/* <Profile
                             first={this.state.first}
                             last={this.state.last}
                             profileimg={this.state.profileimg}
@@ -91,9 +127,34 @@ export default class App extends React.Component {
                             addBio={(arg) => this.addBio(arg)}
                             toggleUploader={this.toggleUploader}
                         /> */}
-                        <h1> Hey I am your App :D</h1>
-                    </header>
-                    <div className="main-container">
+                            <ProfilePic
+                                first={this.state.first}
+                                last={this.state.last}
+                                profileimg={this.state.profileimg}
+                                toggleUploader={() => this.toggleUploader()}
+                            />
+                            {this.state.uploaderIsVisible && (
+                                <Uploader methodInApp={this.methodInApp} />
+                            )}
+                            {/* <h2 onClick={() => this.toggleUploader()}>
+                                {" "}
+                                {/* Aqui puedo escribir algo */}
+                            {this.state.uploaderIsVisible && ""}
+                            {!this.state.uploaderIsVisible && ""} {/* </h2> */}
+                        </header>
+                    </div>
+                    <br></br>
+                    <div>
+                        <Route
+                            path="/user/:id"
+                            render={(props) => (
+                                <OtherProfile
+                                    key={props.url}
+                                    match={props.match}
+                                    history={props.history}
+                                />
+                            )}
+                        />
                         <Route
                             exact
                             path="/"
@@ -109,18 +170,7 @@ export default class App extends React.Component {
                                 />
                             )}
                         />
-
-                        <Route
-                            path="/user/:id"
-                            render={(props) => (
-                                <OtherProfile
-                                    key={props.url}
-                                    match={props.match}
-                                    history={props.history}
-                                />
-                            )}
-                        />
-                        <ProfilePic
+                        {/* <ProfilePic
                             first={this.state.first}
                             last={this.state.last}
                             profileimg={this.state.profileimg}
@@ -135,12 +185,11 @@ export default class App extends React.Component {
                                 "Upload your profile picture"}
                             {!this.state.uploaderIsVisible &&
                                 "Thanks for joining our community"}{" "}
-                        </h2>
+                        </h2> */}
                         <Route path="/" render={() => <FindPeople />} />
                     </div>
                     <Route path="/friends" component={Friends} />
                     <Route path="/chat" component={Chat} />
-                    <LogOut logoutButton={() => this.logOut()} />
                 </BrowserRouter>
             </div>
         );

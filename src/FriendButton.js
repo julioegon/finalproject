@@ -38,6 +38,22 @@ export default function FriendButton({ otherId }) {
                 onClick={() => submit()}
                 id="friend-button"
                 className="button"
+                style={{
+                    font: "whitesmoke",
+                    background: "none",
+                    border: "none",
+                    color: "inherit",
+                    padding: "0",
+                    cursor: "pointer",
+                    // marginTop: "5px",
+                    fontSize: "1.0rem",
+                    color: "white",
+                    width: "100px",
+                    // height: "20px",
+                    margin: "0",
+                    backgroundImage:
+                        "linear-gradient(to top, #736b5e, #aba499)",
+                }}
             >
                 {buttonText}
             </button>

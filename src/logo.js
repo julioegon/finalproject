@@ -1,9 +1,11 @@
 import React from "react";
-
+import { Link } from "react-router-dom";
 export default function Logo() {
     return (
         <>
-            <img src="/img/logo.png" className="logo"/>
+            {/* <Link to="/"> */}
+            <img src="/img/logo.png" className="logo" />
+            {/* </Link> */}
         </>
-    )
+    );
 }

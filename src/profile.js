@@ -5,17 +5,30 @@ import ProfilePic from "./profilepic";
 export default function Profile(props) {
     console.log("props: ", props);
     return (
-        <div>
-            <h1>PROFILE COMPONENT</h1>
-            {/* <span>
-                Hello there {first} {last}
-            </span> */}
+        <div
+            style={{
+                marginTop: "200px",
+                color: "whitesmoke",
+                fontSize: "1.5rem",
+            }}
+        >
+            <h1></h1>
+
             <ProfilePic
                 profileimg={props.profileimg}
                 first={props.first}
                 last={props.last}
             />
-            <br />
+            <br></br>
+            <span
+                style={{
+                    marginTop: "5px",
+                    color: "whitesmoke",
+                    fontSize: "1.5rem",
+                }}
+            >
+                {props.first} {props.last}
+            </span>
             <p>{props.bio}</p>
             <br />
             <BioEditor

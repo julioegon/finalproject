@@ -52,13 +52,52 @@ export default class Login extends React.Component {
                     type="password"
                     onChange={(e) => this.handleChange(e)}
                 ></input>
-                <button onClick={() => this.submit()}>Log in</button>
+                <button
+                    onClick={() => this.submit()}
+                    style={{
+                        font: "whitesmoke",
+                        background: "none",
+                        border: "none",
+                        color: "inherit",
+                        padding: "0",
+                        cursor: "pointer",
+                        // marginTop: "5px",
+                        fontSize: "1.0rem",
+                        color: "white",
+                        width: "100px",
+                        height: "20px",
+                        margin: "0",
+                        backgroundImage:
+                            "linear-gradient(to top, #736b5e, #aba499)",
+                    }}
+                >
+                    Log in
+                </button>
                 <p>
                     Forgot your password?{" "}
-                    <Link to="/passwordreset">Create a new password</Link>
+                    <Link
+                        to="/passwordreset"
+                        style={{
+                            marginTop: "50px",
+                            color: "whitesmoke",
+                            fontSize: "1.5rem",
+                        }}
+                    >
+                        Create a new password
+                    </Link>
                 </p>
                 <p>
-                    Not registered yet? <Link to="/">Register</Link>
+                    Not registered yet?{" "}
+                    <Link
+                        to="/"
+                        style={{
+                            marginTop: "50px",
+                            color: "whitesmoke",
+                            fontSize: "1.5rem",
+                        }}
+                    >
+                        Register
+                    </Link>
                 </p>
             </div>
         );
