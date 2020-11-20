@@ -144,6 +144,13 @@ export default class App extends React.Component {
                         </header>
                     </div>
                     <br></br>
+                    <div
+                        style={{
+                            marginTop: "200px",
+                        }}
+                    >
+                        <Route path="/chat" component={Chat} />
+                    </div>
                     <div>
                         <Route
                             path="/user/:id"
@@ -186,10 +193,14 @@ export default class App extends React.Component {
                             {!this.state.uploaderIsVisible &&
                                 "Thanks for joining our community"}{" "}
                         </h2> */}
-                        <Route path="/" render={() => <FindPeople />} />
+                        <div>
+                            <Route path="/friends" component={Friends} />
+                        </div>
+                        <br></br>
+                        <div>
+                            <Route path="/" render={() => <FindPeople />} />
+                        </div>
                     </div>
-                    <Route path="/friends" component={Friends} />
-                    <Route path="/chat" component={Chat} />
                 </BrowserRouter>
             </div>
         );

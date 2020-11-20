@@ -8,10 +8,11 @@ import PasswordReset from "./passwordreset";
 
 export default function Welcome() {
     return (
-        <div id="welcome">
+        <div id="welcome" style={{ marginLeft: "600px" }}>
             <h1
                 style={{
                     marginTop: "50px",
+
                     color: "#ffd200",
                     fontSize: "1.5rem",
                 }}

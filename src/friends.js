@@ -38,7 +38,7 @@ export default function Friends() {
                     display: "flex",
                     flexDirection: "row",
                     flexWrap: "wrap",
-                    justifyContent: "center",
+                    justifyContent: "space-evenly",
                     alignItems: "flex-start",
                 }}
             >
@@ -129,7 +129,7 @@ export default function Friends() {
                     display: "flex",
                     flexDirection: "row",
                     flexWrap: "wrap",
-                    justifyContent: "center",
+                    justifyContent: "space-evenly",
                     alignItems: "flex-start",
                 }}
             >
@@ -197,7 +197,7 @@ export default function Friends() {
                     display: "flex",
                     flexDirection: "row",
                     flexWrap: "wrap",
-                    justifyContent: "center",
+                    justifyContent: "space-evenly",
                     alignItems: "flex-start",
                 }}
             >
